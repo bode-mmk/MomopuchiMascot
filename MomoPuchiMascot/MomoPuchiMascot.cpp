@@ -32,6 +32,10 @@ ULONG_PTR gdiToken;
 //App SuperVisor
 SuperVisor super_visor;
 
+//ウィンドウサイズ( 暫定 )
+constexpr auto WINDOW_WIDTH = 500u;
+constexpr auto WINDOW_HEIGHT = 500u;
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -179,17 +183,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 	case WM_PAINT:
 	{
+		// ready to draw for double buffer
+		auto buffer_bitmap = std::make_unique<Gdiplus::Bitmap>(WINDOW_WIDTH, WINDOW_HEIGHT);
+		auto buffer_graphics = std::make_unique<Gdiplus::Graphics>(buffer_bitmap.get());
+
+		// fill background for translation by translation color
+		auto brush = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::Color(255, 254, 255));
+		buffer_graphics->FillRectangle(brush.get(), 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+		// draw super visor
+		super_visor.paint_all(*buffer_graphics.get());
+
+		// draw screen
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
-		// TODO: HDC を使用する描画コードをここに追加してください...
 		Gdiplus::Graphics graphics(hdc);
-		auto brush = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::Color(255, 254, 255));
-		graphics.FillRectangle(brush.get(), 0, 0, 500, 500);
-
-		using img = Gdiplus::Image;
-
-		super_visor.paint_all(graphics);
-
+		graphics.DrawImage(buffer_bitmap.get(), 0, 0);
 		EndPaint(hWnd, &ps);
 		break;
 	}
