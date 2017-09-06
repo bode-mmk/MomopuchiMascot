@@ -21,3 +21,8 @@ void Scene::registeration_object(const boost::filesystem::path& folder_path) {
 void Scene::paint(Gdiplus::Graphics& graphics) {
 	object_.draw_parts(graphics);
 }
+
+bool Scene::next_frame_animation() {
+	animation_.next_frame(&object_);
+	return true;
+}

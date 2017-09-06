@@ -79,10 +79,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		else {
 			// game main
 			{
+				// next_frame
+				super_visor.next_frame_all_animation();
 			}
-			InvalidateRect(msg.hwnd, nullptr, TRUE);
-
 			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+
+			InvalidateRect(msg.hwnd, nullptr, FALSE);
 		}
 	}
 
@@ -198,7 +200,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
 		Gdiplus::Graphics graphics(hdc);
-		graphics.DrawImage(buffer_bitmap.get(), 0, 0);
+		graphics.DrawImage(buffer_bitmap.get(), 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		EndPaint(hWnd, &ps);
 		break;
 	}

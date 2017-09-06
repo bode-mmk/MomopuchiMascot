@@ -22,6 +22,9 @@ public:
 	// paint_all
 	bool paint_all(Gdiplus::Graphics&);
 
+	// frame next all animation
+	bool next_frame_all_animation();
+
 	// regsteration scene
 	bool registeration_scene(std::shared_ptr<Scene>&&);
 

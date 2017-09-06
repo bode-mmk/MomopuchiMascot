@@ -31,6 +31,11 @@ public:
 		return left_up_;
 	}
 
+	void set_left_up(const boost::geometry::model::d2::point_xy<int>& pt) {
+		left_up_.x(pt.x());
+		left_up_.y(pt.y());
+	}
+
 	boost::geometry::model::d2::point_xy<int>
 		get_right_down() {
 		return { left_up_.x() + width_, left_up_.y() + height_ };

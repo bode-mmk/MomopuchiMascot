@@ -7,16 +7,20 @@
 class Scene {
 public:
 	// ctor
-	Scene() noexcept = default;
+	Scene() /* noexcept */ = default;
 
-	//dtor
+	// dtor
 	~Scene() noexcept = default;
 
-	//registeration object
+	// registeration object
 	void registeration_object(const boost::filesystem::path& folder_path);
 
-	//paint object
+	// paint object
 	void paint(Gdiplus::Graphics& graphics);
+
+	// next frame animation
+	bool next_frame_animation();
+
 private:
 	Animation animation_;
 	Object object_;

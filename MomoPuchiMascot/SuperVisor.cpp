@@ -14,3 +14,10 @@ bool SuperVisor::registeration_scene(std::shared_ptr<Scene>&& scene) {
 	return true;
 }
 
+bool SuperVisor::next_frame_all_animation() {
+	for (auto&& s : scene_) {
+		s->next_frame_animation();
+	}
+	return true;
+}
+

@@ -71,6 +71,51 @@ public:
 		draw_part(right_foot_, graphics);
 		draw_part(body_, graphics);
 	}
+
+	// ‚»‚ê‚¼‚ê‚ÌƒQƒbƒ^
+	Part* get_back_hair() {
+		return &back_hair_;
+	}
+	Part* get_face() {
+		return &face_;
+	}
+	Part* get_front_hair() {
+		return &front_hair_;
+	}
+	Part* get_head_set() {
+		return &head_set_;
+	}
+	Part* get_eyes() {
+		return &eyes_;
+	}
+	Part* get_left_arm_() {
+		return &left_arm_;
+	}
+	Part* get_left_hand() {
+		return &left_hand_;
+	}
+	Part* get_right_arm() {
+		return &right_arm_;
+	}
+	Part* get_right_hand() {
+		return &right_hand_;
+	}
+	Part* get_left_leg() {
+		return &left_leg_;
+	}
+	Part* get_left_foot() {
+		return &left_foot_;
+	}
+	Part* get_right_leg() {
+		return &right_leg_;
+	}
+	Part* get_right_foot() {
+		return &right_foot_;
+	}
+	Part* get_body() {
+		return &body_;
+	}
+
 protected:
 	void draw_part(const Part& part, Gdiplus::Graphics& graphics) {
 		graphics.DrawImage(part.get_image(), part.get_rect());
