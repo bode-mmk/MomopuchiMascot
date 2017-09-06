@@ -8,6 +8,8 @@
 #include "SuperVisor.h"
 #include <memory>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include <boost/filesystem.hpp>
 
 #define MAX_LOADSTRING 100
@@ -60,15 +62,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    // メイン メッセージ ループ:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+	// 改造されたメインループ
+	while (true) {
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE)) {
+			if (!GetMessage(&msg, nullptr, 0, 0)) {
+				break; // quit 
+			}
+
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else {
+			// game main
+			{
+			}
+			InvalidateRect(msg.hwnd, nullptr, TRUE);
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+		}
+	}
 
 	Gdiplus::GdiplusShutdown(gdiToken);
 
@@ -162,25 +174,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: HDC を使用する描画コードをここに追加してください...
-			Gdiplus::Graphics graphics(hdc);
-			auto brush = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::Color(255, 254, 255));
-			graphics.FillRectangle(brush.get(), 0, 0, 500, 500);
-
-			using img = Gdiplus::Image;
-
-			super_visor.paint_all(graphics);
-
-            EndPaint(hWnd, &ps);
-        }
-        break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hWnd, &ps);
+		// TODO: HDC を使用する描画コードをここに追加してください...
+		Gdiplus::Graphics graphics(hdc);
+		auto brush = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::Color(255, 254, 255));
+		graphics.FillRectangle(brush.get(), 0, 0, 500, 500);
+
+		using img = Gdiplus::Image;
+
+		super_visor.paint_all(graphics);
+
+		EndPaint(hWnd, &ps);
+		break;
+	}
 	case WM_LBUTTONDOWN:
 		::OutputDebugString(_T("Lbutton"));
 		break;
